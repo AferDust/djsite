@@ -1,0 +1,27 @@
+{% extends 'women/base.html' %}
+
+{% block content%}
+    {% if women %}
+        <ul class="list-articles">
+        {% for w in women %}
+            <li>
+                <div class="article-panel">
+                    <p class="first">Category: {{w.category}}</p>
+                    <p class="last">Date: {{w.time_update|date:"d-m-Y H:i:s"}}</p>
+                </div>
+
+                {% if w.photo %}
+                    <p><img src="{{ w.photo.url }}" class="img-article-left thumb"></p>
+                {% endif %}
+
+                <h2>{{w.title}}</h2>
+                <p>{{w.content|linebreaks|truncatewords:10}}</p>
+                <div class="clear"></div>
+                <p class="link-read-post"><a href="{{ w.get_absolute_url }}">Read Post</a></p>
+            </li>
+        {% endfor %}
+    </ul>
+    {% else%}
+        <h1>No women in this category :( </h1>
+    {% endif %}
+{% endblock %}

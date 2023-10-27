@@ -1,0 +1,116 @@
+{% load static %}
+{% load women_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link type="text/css" href="{% static 'women/css/style.css' %}" rel="stylesheet">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="shortcut icon" href="{% static 'women/images/main.ico' %}" type="image/x-icon"/>
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+    <title>{{title}}</title>
+</head>
+<body>
+<table class="table-page">
+    <tr>
+        <td>
+            {% block mainmenu %}
+                <div class="header">
+                    <ul id="mainmenu" class="mainmenu">
+                        <li class="logo">
+                            <a href="{% url 'home' %}">
+                                <div class="logo"></div>
+                            </a>
+                        </li>
+
+                        {% for m in menu %}
+                                <li><a href="{% url m.url_name %}">{{m.title}}</a></li>
+                        {% endfor %}
+
+                        {% if request.user.is_authenticated %}
+                            <li class="last">{{user.username}} | <a href="{% url 'logout'%}">Log Out</a></li>
+                        {% else %}
+                            <li class="last"><a href="{% url 'sign-up' %}">Sign Up</a> | <a href="{% url 'sign-in'%}">Sign In</a></li>
+                        {%endif%}
+
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+            {% endblock mainmenu %}
+
+
+            <table class="table-content">
+                <tr>
+                    <td valign="top" class="left-chapters">
+                        <ul id="leftchapters">
+
+                            {% if category_selected != 0 %}
+                                <li class="selected"><a href="{% url 'home' %}">All categories</a></li>
+                            {% else %}
+                                <li class="selected">All categories</li>
+                            {% endif %}
+
+                            {% for cat in categories %}
+                                {% if cat.women__count > 0 %}
+                                    {% if category_selected != cat.pk %}
+                                        <li><a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a></li>
+                                    {% else %}
+                                        <li class="selected">{{ cat.name }}</li>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+
+                            <li class="share">
+                                <p>Our channel</p>
+                                <a class="share-yt"
+                                   href="https://www.youtube.com/channel/UClJzWfGWuGJL2t-3dYKcHTA/playlists"
+                                   target="_blank" rel="nofollow"></a>
+                            </li>
+                        </ul>
+                    </td>
+
+                    <td valign="top" class="content">
+                        {% block breadcrumbs %}
+                        {% endblock %}
+
+                        <div class="content-text">
+                            {% block content %}
+                            {% endblock %}
+
+                            {% if page_obj.has_other_pages %}
+                            <nav class="list-pages">
+                                <ul>
+                                    {% for p in paginator.page_range %}
+                                        {% if page_obj.number == p %}
+                                            <li class="page-num page-num-selected">{{ p }}</li>
+                                        {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2  %}
+                                             <li class="page-num">
+                                                <a href="?page={{ p }}">{{ p }}</a>
+                                            </li>
+                                        {% endif%}
+                                    {% endfor %}
+                                </ul>
+                            </nav>
+                            {% endif%}
+
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr>
+        <td valign=top>
+            <div id="footer">
+                <p>&copy; 2021 Partial or complete copying of information from this site for distribution to others
+                    resources, including paper, is strictly prohibited.</p>
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+</body>
+</html>
