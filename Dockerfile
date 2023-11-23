@@ -1,7 +1,7 @@
 FROM python:3.10
 
 ENV PYTHONUNBUFFERED 1
-ENV DJANGO_SETTINGS_MODULE coolsite.coolsite.settings
+ENV DJANGO_SETTINGS_MODULE coolsite.settings
 
 WORKDIR /app
 
@@ -23,4 +23,5 @@ RUN python coolsite/manage.py collectstatic --noinput
 EXPOSE 8000
 
 # Start the Django development server
+CMD ["python", "coolsite/manage.py", "migrate"]
 CMD ["python", "coolsite/manage.py", "runserver", "0.0.0.0:8000"]
